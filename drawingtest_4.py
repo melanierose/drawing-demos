@@ -1,34 +1,39 @@
-# import all the shit for the solving differential equations
+#!/usr/bin/end python
+import sys
+print sys.version
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.integrate import odeint
-from pylab import show
+"""
+with open('formatt.txt', 'w') as mattfile:
+  mattfile.write('E = \n')
+  for value in E:
+    mattfile.write(str(value))
+    mattfile.write('\t')
+
+  mattfile.write('\n\nG = \n')
+  
+  for value in G:
+    mattfile.write(str(value))
+    mattfile.write('\t')
+  mattfile.write('\n\nS = \n')
+  
+  for value in S:
+    mattfile.write(str(value))
+    mattfile.write('\t')
+"""
+import solvethings
+
 import matplotlib as mpl
-
+import matplotlib.pyplot as plt
+import numpy as np
 
 # define rates
-k1=0.05	#ER exit rate constant (in min -1)
-k2=.05	#Golgi to SG rate constant (in min -1)
 
-# define system of eqns as dy/dt = f(y,t)
-def f(y,t):
-	f0=-k1*y[0]
-	f1=k1*y[0]-k2*y[1]
-	f2=k2*y[1]
-	return [f0,f1,f2]
-	
-# set initial conditions
-y0 = [100,0,0]
+k1=0.05 #ER exit rate constant (in min -1)
+k2=.05  #Golgi to SG rate constant (in min -1)
 
-# define time interval to integrate
-t=np.linspace(0,60,1000)
-	
-# solve the DEs
-soln = odeint(f, y0, t)
-E = soln[:,0]
-G = soln[:,1]
-S = soln[:,2]
+# call the function defined in solvethings.py file
+
+[t,E,G,S] = solvethings.solvethings(k1,k2)
 
 # plot results as the first of 2 subplots
 F  = plt.figure()
@@ -50,8 +55,8 @@ plt.legend(loc=0)
 vmax, vmin = np.max(E), np.min(E)
 
 # ax1 is the scale bar for the second plot
-#orient it so it's over that part of the final figure
-#Add an axes at position rect [left, bottom, width, height] 
+# orient it so it's over that part of the final figure
+# position rect [left, bottom, width, height] 
 ax1 = F.add_axes([0.5, .95, 0.46, 0.03])
 
 # Set the colormap and norm to correspond to the data for which
@@ -85,6 +90,7 @@ def main():
     message.draw(win)
     win.getMouse()
     win.close()
+main()
 """
 
 # alternative: concatenate vectors into an array
@@ -94,13 +100,13 @@ def main():
 imj = [E,G]
 imj = np.vstack((imj,S))
 
-plt.matshow(imj, fignum=2, cmap=cmap, aspect='auto')
+plt.matshow(imj, fignum=1, cmap=cmap, extent=[100, 50, 150, 0])
 
 # take show vectors and normalize them so they can be used to adjust a color or alpha or something
 imnorm = plt.Normalize(imj)
 
 
 
-show(F)
+plt.show(F)
 
 
